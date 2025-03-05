@@ -1,0 +1,44 @@
+---Sharepoint list url---
+https://scorpiogroup.sharepoint.com/sites/OperationWiki/Lists/EmailTemplates/AllItems.aspx
+
+---url for VBA use---
+https://scorpiogroup.sharepoint.com/sites/OperationWiki/_api/web/lists/getbytitle('EmailTemplates')/items
+
+Deployment Steps
+
+Option 1: Deploy via Microsoft 365 Centralized Deployment
+
+1️⃣ Upload manifest.xml to Microsoft 365 Admin Center → Admin deploys to all users.2️⃣ Users will see the "Email Template Add-in" in their Outlook.
+
+Option 2: Manual Installation (For Testing)
+
+1️⃣ Host the Add-in files (index.html, script.js) on a public server (e.g., SharePoint site, Azure).2️⃣ Open Outlook → Get Add-ins → Add Custom Add-in.3️⃣ Upload the manifest.xml.
+
+code
+npm install -g yo generator-office
+npm install -g office-addin-cli
+yo office
+ls -la
+npm install
+set NODE_TLS_REJECT_UNAUTHORIZED=0  --> temporarily disables SSL validation
+npx office-addin-manifest validate manifest.xml
+npx office-addin-debugging start manifest.xml
+https://localhost:3000/templates.json
+https://localhost:3000/taskpane.html
+https://localhost:3000/taskpane.js
+npx webpack --mode development ---. to build the add-in
+npx webpack serve --mode development --- to restart webpack
+npm start // https://localhost:3000/
+npm stop
+npx kill-port 3000
+npx office-addin-debugging stop
+npx office-addin-debugging start --debug-method direct
+netstat -ano | findstr :3000
+taskkill /PID 12345 /F
+
+
+
+versions
+v01 - working!
+v02- cleaned up files, stopped writing of files every time when build
+v03 - no error when INsert Template is selected with empty fields

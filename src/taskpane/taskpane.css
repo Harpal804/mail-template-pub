@@ -1,0 +1,136 @@
+/* 
+ * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ */
+
+ html,
+ body {
+     width: 100%;
+     height: 100%;
+     margin: 0;
+     padding: 0;
+     font-family: 'Segoe UI', sans-serif;
+ }
+ 
+ ul {
+     margin: 0;
+     padding: 0;
+ }
+ 
+ .ms-welcome__header {
+     padding: 20px;
+     padding-bottom: 30px;
+     padding-top: 40px;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     background-color: #f3f3f3;
+     text-align: center;
+ }
+ 
+ .ms-welcome__main {
+     display: flex;
+     flex-direction: column;
+     flex-wrap: nowrap;
+     align-items: center;
+     flex: 1 0 0;
+     padding: 10px 20px;
+     text-align: center;
+ }
+ 
+ .ms-welcome__main label {
+     font-weight: bold;
+     margin-top: 10px;
+     display: block;
+ }
+ 
+ .ms-welcome__main select {
+     width: 100%;
+     max-width: 300px;
+     padding: 8px;
+     margin-top: 5px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     font-size: 14px;
+     background-color: #fff;
+ }
+ 
+ .ms-welcome__main button {
+     width: 100%;
+     max-width: 300px;
+     padding: 10px;
+     margin-top: 20px;
+     font-size: 16px;
+     font-weight: bold;
+     background-color: #0078d7;
+     color: white;
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+ }
+ 
+ .ms-welcome__main button:hover {
+     background-color: #005a9e;
+ }
+ 
+ #titleListBox {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
+ /* ✅ Added styling for the title search input */
+ #titleSearch {
+     display: none; /* Initially hidden until category is selected */
+     flex: 1; /* Allows the input to take up available space */
+     width: 100%;
+     max-width: 250px;
+     padding: 8px;
+     margin-top: 5px; */
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     font-size: 14px;
+     background-color: #fff;
+     height: 35px; /* Ensure the height matches the button */
+     vertical-align: middle;
+ }
+ 
+ /*b {
+     font-weight: bold;
+ } */
+
+ #clearSearchBtn {
+    display: none; /* Initially hidden until category is selected */
+    /* padding: 6px 10px; */
+    width: 35px; /* Fix the size of the button */
+    height: 35px; /* Match input height */
+    margin-top: 5px;
+    margin-left: 5px;
+    border: none;
+    background-color: #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center ❌ inside button */
+    vertical-align: middle;
+}
+
+#clearSearchBtn:hover {
+    background-color: #999;
+}
+
+/* Ensure both elements are inside a flex container */
+.search-container {
+    display: flex;
+    align-items: center; /* Aligns elements in the center vertically */
+    max-width: 300px;
+    width: 100%;
+}
