@@ -85,7 +85,7 @@
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="Templates"/>
         <bt:String id="TaskpaneButton.Label" DefaultValue="Insert Template"/>
-        <bt:String id="TaskpaneButton.Title" DefaultValue="Select Template"/>
+        <bt:String id="TaskpaneButton.Title" DefaultValue="Insert Mail Template"/>
       </bt:ShortStrings>
       <bt:LongStrings>
         <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Choose from a list of predefined email templates and insert into your message."/>
