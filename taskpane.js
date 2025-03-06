@@ -16,7 +16,7 @@ let templatesData = [];
 
 async function loadTemplates() {
   try {
-    const response = await fetch("/templates.json");
+    const response = await fetch("/templates.txt");
     const data = await response.json();
     templatesData = data.templates;
 
