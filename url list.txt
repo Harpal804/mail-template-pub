@@ -4,6 +4,10 @@ https://scorpiogroup.sharepoint.com/sites/OperationWiki/Lists/EmailTemplates/All
 ---url for VBA use---
 https://scorpiogroup.sharepoint.com/sites/OperationWiki/_api/web/lists/getbytitle('EmailTemplates')/items
 
+Github Pages site - public deployment
+
+https://harpal804.github.io/mail-template-pub/
+
 Deployment Steps
 
 Option 1: Deploy via Microsoft 365 Centralized Deployment
