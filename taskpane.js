@@ -16,7 +16,7 @@ let templatesData = [];
 
 async function loadTemplates() {
   try {
-    const response = await fetch("/templates.txt");
+    const response = await fetch("https://harpal804.github.io/mail-template-pub/templates.txt");
     const data = await response.json();
     templatesData = data.templates;
 
