@@ -1,77 +1,28 @@
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license.
+ */
 
-/* global Office, fetch, console, document */
-let templatesData = [];
+/* global document, Office, fetch */
 
-const msalConfig = {
-  auth: {
-    clientId: "8c6c0da7-b51c-4961-a1d6-9129be5f7450", // 🔁 Insert your Azure App (Client) ID
-    authority: "https://login.microsoftonline.com/a0bdf996-65bc-49f7-9b9a-687d34df8c65", // 🔁 Insert your Tenant ID
-    redirectUri: "https://harpal804.github.io/mail-template-pub/taskpane.html" // 🔁 Match with your manifest
-  }
-};
-
-const msalInstance = new msal.PublicClientApplication(msalConfig);
-
-const loginRequest = {
-  scopes: ["https://graph.microsoft.com/Sites.Read.All"]
-};
-
-Office.onReady(info => {
+Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
     document.getElementById("insertTemplateBtn").onclick = insertTemplate;
-    loadTemplates(); // Load SharePoint list templates
+    loadTemplates();
   }
 });
 
+let templatesData = [];
+
 async function loadTemplates() {
   try {
-    const accounts = msalInstance.getAllAccounts();
-    let account = accounts[0];
-
-    if (!account) {
-      const loginResponse = await msalInstance.loginPopup(loginRequest);
-      account = loginResponse.account;
-    }
-
-    msalInstance.setActiveAccount(account);
-
-    let tokenResponse;
-    try {
-      tokenResponse = await msalInstance.acquireTokenSilent({ ...loginRequest, account });
-    } catch (silentError) {
-      tokenResponse = await msalInstance.acquireTokenPopup(loginRequest);
-    }
-
-    const accessToken = tokenResponse.accessToken;
-
-    const siteUrl = "https://scorpiogroup.sharepoint.com/sites/OperationWiki";
-    const listName = "EmailTemplates";
-    const apiUrl = `${siteUrl}/_api/web/lists/getbytitle('${listName}')/items`;
-
-    const response = await fetch(apiUrl, {
-      headers: {
-        "Authorization": `Bearer ${accessToken}`,
-        "Accept": "application/json;odata=verbose"
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
+    const response = await fetch("https://harpal804.github.io/mail-template-pub/templates.json");
     const data = await response.json();
+    templatesData = data.templates;
 
-    templatesData = data.d.results.map(item => ({
-      category: item.Category,
-      title: item.Title,
-      body: item.Body
-    }));
-
-    console.log("✅ Templates fetched from SharePoint:", templatesData);
     populateCategoryDropdown();
   } catch (error) {
-    console.error("❌ Error fetching templates from SharePoint:", error);
-    showNotification("Error", "Failed to load templates from SharePoint.");
+    console.error("Error loading templates:", error);
   }
 }
 
@@ -94,41 +45,55 @@ function populateTitleListBox() {
   const titleListBox = document.getElementById("titleListBox");
   const titleSearch = document.getElementById("titleSearch");
   const clearSearchBtn = document.getElementById("clearSearchBtn");
-  const category = document.getElementById("categorySelect").value;
+  const category = (document.getElementById("categorySelect")).value;
 
-  if (!titleListBox || !titleSearch || !clearSearchBtn || !category) return;
+  if (!titleListBox || !titleSearch || !clearSearchBtn || !category) {
+    console.error("Title list box, search input, or clear button not found.");
+    return;
+  }
 
+  // Show the search input and clear button when category is selected
   titleSearch.style.display = "block";
   clearSearchBtn.style.display = "block";
-  titleSearch.value = "";
+  titleSearch.value = ""; // Reset search when category changes
 
+  // Get the filtered titles based on category
   let filteredTemplates = templatesData.filter(t => t.category === category);
 
+  // Function to update the title list box based on search text
   function updateTitleListBox(searchText = "") {
-    titleListBox.innerHTML = "";
+    titleListBox.innerHTML = ''; // Clear existing items
+
     filteredTemplates
       .filter(template => template.title.toLowerCase().startsWith(searchText.toLowerCase()))
       .forEach(template => {
         let option = document.createElement("option");
-        option.value = template.body;
+        option.value = template.body; // Store template body in value
         option.textContent = template.title;
         titleListBox.appendChild(option);
       });
   }
 
-  updateTitleListBox();
-
+  // Initial population of the list box
+  updateTitleListBox();  
+  
+  // Listen for user input in search box
   titleSearch.addEventListener("input", () => {
     updateTitleListBox(titleSearch.value);
   });
 
+  // Clear button functionality
   clearSearchBtn.addEventListener("click", () => {
     titleSearch.value = "";
     updateTitleListBox();
   });
-
+  
+  // Ensure selecting an item enables the insert button
   titleListBox.addEventListener("change", () => {
-    document.getElementById("insertTemplateBtn").removeAttribute("disabled");
+    const insertButton = document.getElementById("insertTemplateBtn");
+    if (insertButton) {
+      insertButton.removeAttribute("disabled");
+    }
   });
 }
 
@@ -144,10 +109,14 @@ function insertTemplate() {
     return;
   }
 
-  const templateText = titleListBox.value;
+  const templateText = titleListBox.value; // Get selected template body
 
+  console.log("✅ Inserting template:", templateText);
+
+  // Ensure Office API is initialized before inserting text
   if (!Office.context || !Office.context.mailbox || !Office.context.mailbox.item) {
     showNotification("❌ Error", "Office Add-in API not available. Please restart Outlook.");
+    console.error("Office.context.mailbox.item is undefined.");
     return;
   }
 
@@ -161,28 +130,27 @@ function insertTemplate() {
       } else {
         console.log("✅ Template inserted successfully.");
         showNotification("✅ Success", "Template inserted into the email.");
-
-        categorySelect.selectedIndex = 0;
-        titleListBox.innerHTML = "";
-        titleSearch.value = "";
-        titleSearch.style.display = "none";
-        clearSearchBtn.style.display = "none";
-        insertButton.setAttribute("disabled", "true");
+      
+      // ✅ Reset selections after insertion
+      categorySelect.selectedIndex = 0;
+      titleListBox.innerHTML = "";
+      titleSearch.value = "";
+      titleSearch.style.display = "none";
+      clearSearchBtn.style.display = "none";
+      insertButton.setAttribute("disabled", "true");
       }
     }
   );
 }
 
+/**
+ * Show an Office notification message (instead of alert()).
+ */
 function showNotification(title, message) {
-  if (!Office || !Office.context || !Office.context.mailbox || !Office.context.mailbox.item) {
-    alert(title + ": " + message);
-    return;
-  }
-
   Office.context.mailbox.item.notificationMessages.addAsync("notification", {
     type: Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
     message: message,
-    icon: "icon-16",
+    icon: "icon-16", // Optional
     persistent: false
   });
 }
