@@ -16,7 +16,7 @@ let templatesData = [];
 
 async function loadTemplates() {
   try {
-    const response = await fetch("https://sgtestoutlook01.blob.core.windows.net/file/templates.json?sv=2023-01-03&st=2025-03-27T14%3A53%3A25Z&se=2025-03-28T14%3A53%3A25Z&sr=b&sp=r&sig=jbWguYrpO0esNIOZLZqjOWsn5q1%2BmGooTEBrKqBGpek%3D");
+    const response = await fetch("https://harpal804.github.io/mail-template-pub/templates.json");
     const data = await response.json();
     templatesData = data.templates;
 

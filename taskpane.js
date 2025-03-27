@@ -16,7 +16,7 @@ let templatesData = [];
 
 async function loadTemplates() {
   try {
-    const response = await fetch("https://harpal804.github.io/mail-template-pub/templates.json");
+    const response = await fetch("https://sgtestoutlook01.blob.core.windows.net/file/templates.json?sv=2023-01-03&st=2025-03-27T14%3A53%3A25Z&se=2025-03-28T14%3A53%3A25Z&sr=b&sp=r&sig=jbWguYrpO0esNIOZLZqjOWsn5q1%2BmGooTEBrKqBGpek%3D");
     const data = await response.json();
     templatesData = data.templates;
 
@@ -75,8 +75,8 @@ function populateTitleListBox() {
   }
 
   // Initial population of the list box
-  updateTitleListBox();  
-  
+  updateTitleListBox();
+
   // Listen for user input in search box
   titleSearch.addEventListener("input", () => {
     updateTitleListBox(titleSearch.value);
@@ -87,7 +87,7 @@ function populateTitleListBox() {
     titleSearch.value = "";
     updateTitleListBox();
   });
-  
+
   // Ensure selecting an item enables the insert button
   titleListBox.addEventListener("change", () => {
     const insertButton = document.getElementById("insertTemplateBtn");
@@ -130,14 +130,14 @@ function insertTemplate() {
       } else {
         console.log("✅ Template inserted successfully.");
         showNotification("✅ Success", "Template inserted into the email.");
-      
-      // ✅ Reset selections after insertion
-      categorySelect.selectedIndex = 0;
-      titleListBox.innerHTML = "";
-      titleSearch.value = "";
-      titleSearch.style.display = "none";
-      clearSearchBtn.style.display = "none";
-      insertButton.setAttribute("disabled", "true");
+
+        // ✅ Reset selections after insertion
+        categorySelect.selectedIndex = 0;
+        titleListBox.innerHTML = "";
+        titleSearch.value = "";
+        titleSearch.style.display = "none";
+        clearSearchBtn.style.display = "none";
+        insertButton.setAttribute("disabled", "true");
       }
     }
   );
