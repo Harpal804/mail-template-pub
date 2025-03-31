@@ -4,8 +4,8 @@ let templatesData = [];
 
 const msalConfig = {
   auth: {
-    clientId: "8c6c0da7-b51c-4961-a1d6-9129be5f7450", // 🔁 Insert your Azure App (Client) ID
-    authority: "https://login.microsoftonline.com/a0bdf996-65bc-49f7-9b9a-687d34df8c65", // 🔁 Insert your Tenant ID
+    clientId: "CLIENT ID", // 🔁 Insert your Azure App (Client) ID
+    authority: "https://login.microsoftonline.com/TENAND_ID", // 🔁 Insert your Tenant ID
     redirectUri: "https://harpal804.github.io/mail-template-pub/taskpane.html" // 🔁 Match with your manifest
   }
 };
@@ -44,7 +44,7 @@ async function loadTemplates() {
 
     const accessToken = tokenResponse.accessToken;
 
-    const siteUrl = "https://scorpiogroup.sharepoint.com/sites/OperationWiki";
+    const siteUrl = "https://COMPANY.sharepoint.com/sites/OperationWiki";
     const listName = "EmailTemplates";
     const apiUrl = `${siteUrl}/_api/web/lists/getbytitle('${listName}')/items`;
 
